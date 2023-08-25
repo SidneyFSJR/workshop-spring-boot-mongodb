@@ -3,6 +3,7 @@ package com.sidneyferreira.workshopmongo.dto;
 import com.sidneyferreira.workshopmongo.domain.User;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 public class UserDTO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -12,7 +13,7 @@ public class UserDTO implements Serializable {
     private String email;
 
 
-    public UserDTO() {
+    public UserDTO(Optional<User> obj) {
     }
 
     public UserDTO(User obj) {

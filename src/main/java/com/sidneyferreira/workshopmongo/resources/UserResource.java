@@ -5,7 +5,6 @@ import com.sidneyferreira.workshopmongo.dto.UserDTO;
 import com.sidneyferreira.workshopmongo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -14,6 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+//@Jacksonized
+//@JsonIgnoreProperties
 @RestController
 @RequestMapping(value = "/users")
 public class UserResource {
@@ -35,7 +36,12 @@ public class UserResource {
     }
 
     @RequestMapping(method=RequestMethod.POST)
-    public ResponseEntity<Void> insert(@RequestBody @Validated UserDTO objDto) {
+//    @PostMapping(value = "/content", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    @PostMapping(
+//            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+//            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Void> insert(@RequestBody UserDTO objDto) {
         User obj = service.fromDTO(objDto);
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -45,6 +51,17 @@ public class UserResource {
     @RequestMapping(value = "/{id}", method=RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+//    @JsonCreator
+//    @PutMapping (value = "/content", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+    @RequestMapping(value = "/{id}", method=RequestMethod.PUT)
+    public ResponseEntity<Void> update(@RequestBody UserDTO objDto, @PathVariable String id) {
+        User obj = service.fromDTO(objDto);
+        obj.setId(id);
+        obj = service.update(obj);
         return ResponseEntity.noContent().build();
     }
 
